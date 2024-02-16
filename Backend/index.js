@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const { globalErrorHandle } = require("./Middlewares/globalErrorHandle");
 const userRouter = require("./Routes/userRoutes");
+const chatRouter = require("./Routes/chatRoutes");
 const cookieParser = require('cookie-parser');
 require('express-async-errors');
 const cors = require('cors');
@@ -18,6 +19,8 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use("/api/v1/user" , userRouter);
+
+app.use("/api/v1/chats" , chatRouter);
 
 app.use("*", (req, res) => {
   res.status(400).json({
