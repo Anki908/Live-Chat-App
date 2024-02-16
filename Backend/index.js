@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const { globalErrorHandle } = require("./Middlewares/globalErrorHandle");
 const userRouter = require("./Routes/userRoutes");
 const chatRouter = require("./Routes/chatRoutes");
+const messageRouter = require("./Routes/messageRoutes");
 const cookieParser = require('cookie-parser');
 require('express-async-errors');
 const cors = require('cors');
@@ -21,6 +22,8 @@ app.use(cors());
 app.use("/api/v1/user" , userRouter);
 
 app.use("/api/v1/chats" , chatRouter);
+
+app.use("/api/v1/message" , messageRouter);
 
 app.use("*", (req, res) => {
   res.status(400).json({
