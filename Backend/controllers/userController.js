@@ -2,6 +2,7 @@ const { User } = require("../Model/userModel")
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+require('express-async-errors');
 
 exports.signUp = async (req , res) => {
     const oldUser = await User.findOne({email: req.body.email});
@@ -43,18 +44,6 @@ exports.signIn = async(req , res) => {
     res.status(200).json({
         msg: 'user logged in sucessfully'
     })
-}
-
-exports.logout = (req , res) => {
-
-    res.cookie('token' , 'logout' , {
-        httpOnly: true,
-        expires: new Date(Date.now())
-    })
-    res.status(200).json({
-        msg: "logged out successfully"
-    })
-    
 }
 
 exports.findUser = async(req , res) => {
