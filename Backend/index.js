@@ -5,6 +5,7 @@ const { globalErrorHandle } = require("./Middlewares/globalErrorHandle");
 const userRouter = require("./Routes/userRoutes");
 const cookieParser = require('cookie-parser');
 require('express-async-errors');
+const cors = require('cors');
 
 dotenv.config({ path: "./config.env" });
 
@@ -14,6 +15,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 app.use("/api/v1/user" , userRouter);
 
