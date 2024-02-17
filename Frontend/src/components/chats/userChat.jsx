@@ -5,7 +5,7 @@ import avatar from '../../assets/avatar.svg'
 
 const userChat = ({chat , user}) => {
     const {recpUser} = useFetchRecp(chat , user);
-    console.log(recpUser);
+    //console.log(recpUser)
   return (
     <Stack direction="horizontal" gap={3} className="user-card align-items-center p-2 justify-content-between"
     role="button"
@@ -15,7 +15,7 @@ const userChat = ({chat , user}) => {
           <img src={avatar} height="35px"/>
         </div>
         <div className='text-content'>
-          <div className='name'>{recpUser?.name}</div>
+          <div className='name'>{recpUser?.user[0]?.name}</div>
           <div className='text'>Text Messages</div>
         </div>
       </div>

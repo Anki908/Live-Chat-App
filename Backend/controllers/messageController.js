@@ -12,6 +12,7 @@ exports.createMessage = async(req , res) => {
 }
 
 exports.getMessages = async(req , res) => {
+    console.log("message backend triggered");
     const { chatId } = req.params;
     const msg = await Message.find({ chatId });
     res.status(200).json(msg); 
