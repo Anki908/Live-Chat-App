@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, getRequest, postRequest } from "../utils/service";
+import {io} from 'socket.io-client'
 
 export const ChatContext = createContext();
 
@@ -12,9 +13,35 @@ export const ChatContextProvider = ({ children , user }) => {
     const [messages , setMessages] = useState(null);
     const [isMessagesLoading , setIsMessagesLoading] = useState(false);
     const [messagesError , setMessagesError] = useState(null);
+    const [sendTextMessageError , setSendTextMessageError] = useState(null)
+    const [newMessage , setNewMessage] = useState(null);
+    const [socket , setSocket] = useState(null);
+    const [onlineUsers , setOnlineUsers] = useState(null);
+
+    useEffect(() => {
+        const newSocket = io('http://localhost:3000/');
+        setSocket(newSocket);
+
+        return () => {
+            newSocket.disconnect();
+        }
+    } , [user])
 
 
-    //console.log(currentChat?._id);
+    useEffect(() => {
+        if(socket == null) return
+        socket.emit("addNewUser" , user?._id)
+        socket.on("getOnlineUsers" , (res) => {
+            setOnlineUsers(res);
+        }) 
+
+        return () => {
+            socket.off("getOnlineUsers")
+        };
+        
+    } , [socket]);
+
+    console.log("onlineUsers" , onlineUsers);
 
     useEffect(() => {
         const getUsers = async() => {
@@ -85,6 +112,24 @@ export const ChatContextProvider = ({ children , user }) => {
         setCurrentChat(chat);
     } , [])
 
+    const sendTextMessage = useCallback(async(textMessage , sender , currentChatId , setTextMessage) => {
+        if(!textMessage) return console.log("Please type something");
+
+        const response = await postRequest(`${baseUrl}/message` , JSON.stringify({
+            chatId: currentChatId,
+            senderId: sender,
+            text: textMessage,
+        }))
+
+        if(response.error){
+            return setSendTextMessageError(response);
+        }
+
+        setNewMessage(response);
+        setMessages((prev) => [...prev , response]);
+        setTextMessage("");
+    } , [])
+
     return (
         <ChatContext.Provider value={{
             userChats,
@@ -96,7 +141,9 @@ export const ChatContextProvider = ({ children , user }) => {
             messages,
             messagesError,
             isMessagesLoading,
-            currentChat
+            currentChat,
+            sendTextMessage,
+            onlineUsers
         }}>
             {children}
         </ChatContext.Provider>
