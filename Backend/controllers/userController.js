@@ -1,5 +1,5 @@
-const { User } = require("../Model/userModel")
-const bcrypt = require('bcryptjs')
+const { User } = require("../Model/userModel");
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 require('express-async-errors');
@@ -21,7 +21,6 @@ exports.signUp = async (req , res) => {
 }
 
 exports.signIn = async(req , res) => {
-
     if(!req.body.email || !req.body.password) throw new Error("please provide email and password");
     
     const user = await User.findOne({email: req.body.email});
@@ -42,13 +41,14 @@ exports.signIn = async(req , res) => {
     })
 
     res.status(200).json({
-        msg: 'user logged in sucessfully'
+        msg: 'user logged in sucessfully',
+        _id: user._id
     })
 }
 
 exports.findUser = async(req , res) => {
     const id = req.params.id;
-    console.log(id);
+    //console.log(id);
     const user = await User.find({_id: id});
     if(!user){
         throw new Error("user not found");

@@ -14,8 +14,6 @@ export const AuthContextProvider = ({ children }) => {
         email: "",
         password: ""
     })
-
-
     const [registerError , setRegisterError] = useState(null);
     const [isRegisterLoading , setIsRegisterLoading] = useState(false);
 
@@ -28,7 +26,7 @@ export const AuthContextProvider = ({ children }) => {
     } , [])
 
    // console.log(registerInfo);
-   console.log(loginInfo);
+   //console.log(loginInfo);
     const updateRegisterInfo = useCallback((info ) => {
         setRegisterInfo(info);
     },[])
@@ -54,6 +52,7 @@ export const AuthContextProvider = ({ children }) => {
             return setRegisterError(response);
         }
         localStorage.setItem("User" , JSON.stringify(response));
+        //console.log(response);
         setUser(response);
     } , [registerInfo])
 
@@ -67,6 +66,7 @@ export const AuthContextProvider = ({ children }) => {
             return setLoginError(response);
         }
         localStorage.setItem("User" , JSON.stringify(response));
+        //console.log(response);
         setUser(response);
     } , [loginInfo])
 

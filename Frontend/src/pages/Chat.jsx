@@ -6,8 +6,8 @@ const Chat = () => {
   const { userChats,
     isUserChatsLoading,
     userChatsError } = useContext(ChatContext);
-    console.log(userChats);
-    
+  console.log(userChats);
+
   return (
     <div>
       Chat
