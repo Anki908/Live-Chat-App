@@ -41,7 +41,26 @@ export const ChatContextProvider = ({ children , user }) => {
         
     } , [socket]);
 
-    console.log("onlineUsers" , onlineUsers);
+
+    useEffect(() => {
+        if(socket == null) return
+        const recpId = currentChat?.members?.find((id) => id !== user?._id)
+        socket.emit("sendMessage" , { ...newMessage , recpId});
+    } , [newMessage]);
+
+
+    useEffect(() => {
+        if(socket == null) return
+        socket.on("getMessage" , (res) => {
+            if(currentChat?._id !== res.chatId) return;
+            setMessages((prev) => [...prev , res]);
+        })
+        return () => {
+            socket.off("getMessage");
+        };
+    } , [socket , currentChat]);
+
+    //console.log("onlineUsers" , onlineUsers);
 
     useEffect(() => {
         const getUsers = async() => {

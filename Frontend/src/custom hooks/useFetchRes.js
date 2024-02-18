@@ -15,6 +15,7 @@ export const useFetchRecp = ( chat , user ) => {
             if(response.error){
                 return setError(response);
             }
+            console.log(response);
             setRecpUser(response);
         }
         getUser();
